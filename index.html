@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misión Evacuación 3D: Volcán Puracé</title>
+    <!-- Fuentes tipográficas avanzadas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+    <!-- Librería gráfica 3D (Three.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <!-- Fondo con brasas y partículas flotantes 3D -->
+    <div class="contenedor-cenizas-3d" id="cenizasFondo"></div>
+    <div class="glow-volcanico"></div>
+
+    <main class="contenedor-principal-3d" id="tarjeta3D">
+        <header class="portada">
+            <h1 class="titulo-portada-3d">🌋 MISIÓN EVACUACIÓN 3D 🌋</h1>
+            <h2 class="subtitulo-portada-3d">VOLCÁN PURACÉ • ALERTA NARANJA</h2>
+            
+            <!-- Tarjeta con relieve 3D y cristales neón -->
+            <div class="tarjeta-creditos-3d" id="tarjetaEstudiante">
+                <div class="institucion-badge-3d">
+                    <span class="icono-escuela">🏫</span> 
+                    <span class="nombre-ie">Institución Educativa Manuel María Mosquera</span>
+                </div>
+                <div class="detalles-creditos">
+                    <div class="item-credito">
+                        <span class="etiqueta">👤 Estudiante:</span>
+                        <span class="valor highlight-estudiante">María Camila Ríos Manquillo</span>
+                    </div>
+                    <div class="item-credito">
+                        <span class="etiqueta">👨‍🏫 Docente:</span>
+                        <span class="valor highlight-docente">Álvaro Stid Bolaños</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Menú de la Portada -->
+        <div id="contenedorPortada">
+            <section class="seccion-personalizar">
+                <h3>🎨 Personaliza tu Personaje:</h3>
+                <div class="paleta-colores-3d">
+                    <button class="btn-color-3d activo" style="--c: #2ecc71;" onclick="seleccionarColor(0, this)" title="Verde"></button>
+                    <button class="btn-color-3d" style="--c: #3498db;" onclick="seleccionarColor(1, this)" title="Azul"></button>
+                    <button class="btn-color-3d" style="--c: #ff69b4;" onclick="seleccionarColor(2, this)" title="Rosado"></button>
+                    <button class="btn-color-3d" style="--c: #9b59b6;" onclick="seleccionarColor(3, this)" title="Morado"></button>
+                    <button class="btn-color-3d" style="--c: #f1c40f;" onclick="seleccionarColor(4, this)" title="Amarillo"></button>
+                    <button class="btn-color-3d" style="--c: #e67e22;" onclick="seleccionarColor(5, this)" title="Naranja"></button>
+                </div>
+            </section>
+
+            <div class="divisor-brillante"></div>
+
+            <section class="seccion-dificultad">
+                <h2>Elige el Modo de Juego:</h2>
+                <div class="grupo-botones-3d">
+                    <button class="btn-dificultad-3d btn-facil" onclick="iniciarJuego('facil')">🟢 FÁCIL (3D)</button>
+                    <button class="btn-dificultad-3d btn-medio" onclick="iniciarJuego('medio')">🟡 MEDIO (3D)</button>
+                    <button class="btn-dificultad-3d btn-dificil" onclick="iniciarJuego('dificil')">🔴 DIFÍCIL (3D)</button>
+                    <button class="btn-dificultad-3d btn-trivia" onclick="abrirTrivia()">❓ TRIVIA PURACÉ</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Contenedor del Juego 3D -->
+    <div id="contenedorJuego" style="display: none;">
+        <div id="hud">
+            <span id="txtSalud">Salud: 100%</span> | 
+            <span id="txtPuntos">Puntos: 0</span> | 
+            <span id="txtNivel">Nivel: -</span>
+            <div id="indicadorColor">Presiona <b>'C'</b> para cambiar de ropa 🎨</div>
+        </div>
+        <div id="canvas3d"></div>
+    </div>
+
+    <!-- Contenedor del Minijuego de Trivia -->
+    <div id="contenedorTrivia" style="display: none;" class="contenedor-principal-3d">
+        <header class="header-trivia">
+            <h2>🧠 Desafío del Volcán Puracé</h2>
+            <div id="marcadorTrivia">Puntos: <span id="puntosTrivia">0</span></div>
+        </header>
+        <div class="caja-pregunta-3d">
+            <h3 id="txtPregunta">Cargando pregunta...</h3>
+            <div id="opcionesTrivia" class="opciones-trivia"></div>
+            <div id="retroalimentacionTrivia" class="retro-trivia"></div>
+        </div>
+        <button class="btn-dificultad-3d btn-salir-trivia" onclick="volverMenu()">⬅ Volver al Menú</button>
+    </div>
+
+    <!-- Panel informativo -->
+    <section class="panel-informacion-3d">
+        <h3>💡 Controles e Instrucciones de Prevención</h3>
+        <ul>
+            <li><b>Movimiento (Modo 3D):</b> Usa Flechas <b>Izquierda / Derecha</b> o teclas <b>A / D</b>.</li>
+            <li><b>🏥 Tapabocas N95 / Botiquines:</b> Recógelos para curar tu vida (+Salud).</li>
+            <li><b>🎒 Mochilas / Cantimploras:</b> Recógelos para sumar puntos de prevención (+Puntos).</li>
+            <li><b>🧠 Modo Trivia:</b> Responde preguntas educativas sobre la prevención del Volcán Puracé para evaluar tus conocimientos.</li>
+        </ul>
+    </section>
+
+    <script src="juego.js"></script>
+</body>
+</html>
